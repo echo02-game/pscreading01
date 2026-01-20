@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朗讀作品詞語練習 - 北京的春節</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #8b6f47 0%, #a0826d 100%);
+            border-radius: 15px;
+        }
+
+        .title-section h1 {
+            font-size: 32px;
+            color: #fff;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: #ffe8cc;
+            font-size: 14px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .vocabulary-card {
+            background: linear-gradient(135deg, #fafaf8 0%, #f5f0eb 100%);
+            border: 2px solid #d4c4b0;
+            border-radius: 15px;
+            padding: 50px 30px;
+            margin: 30px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .vocabulary-card:hover {
+            box-shadow: 0 8px 20px rgba(139, 111, 71, 0.15);
+            border-color: #a0826d;
+        }
+
+        .chinese-word {
+            font-size: 48px;
+            font-weight: bold;
+            color: #8b6f47;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+
+        .pinyin {
+            font-size: 24px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .listen-btn {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+        }
+
+        .listen-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #357abd 0%, #2a5fa0 100%);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        .record-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .record-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .record-btn.recording {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(231, 76, 60, 0.8);
+            }
+        }
+
+        .status-message {
+            text-align: center;
+            font-size: 16px;
+            color: #666;
+            margin: 15px 0;
+            min-height: 24px;
+        }
+
+        .status-success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-recording {
+            color: #e74c3c;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.6; }
+        }
+
+        .progress-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0d5c8;
+        }
+
+        .progress-label {
+            text-align: center;
+            font-size: 18px;
+            color: #8b6f47;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar-container {
+            background: #e0d5c8;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #4a90e2 0%, #27ae60 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .navigation-btns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .prev-btn {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .prev-btn:hover:not(:disabled) {
+            background: #7f8c8d;
+        }
+
+        .prev-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .next-btn {
+            background: #27ae60;
+            color: white;
+        }
+
+        .next-btn:hover:not(:disabled) {
+            background: #229954;
+        }
+
+        .complete-section {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .complete-section.show {
+            display: block;
+        }
+
+        .complete-icon {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+
+        .complete-text {
+            font-size: 28px;
+            color: #27ae60;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .reset-btn {
+            background: #4a90e2;
+            color: white;
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #357abd;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .title-section h1 {
+                font-size: 24px;
+            }
+
+            .chinese-word {
+                font-size: 36px;
+            }
+
+            .pinyin {
+                font-size: 18px;
+            }
+
+            .btn {
+                width: 70px;
+                height: 70px;
+                font-size: 16px;
+            }
+
+            .vocabulary-card {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 20px;
+            }
+
+            .title-section h1 {
+                font-size: 20px;
+            }
+
+            .chinese-word {
+                font-size: 32px;
+            }
+
+            .pinyin {
+                font-size: 16px;
+            }
+
+            .btn {
+                width: 60px;
+                height: 60px;
+                font-size: 14px;
+            }
+
+            .controls {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-section">
+            <h1>朗讀作品詞語練習</h1>
+            <p class="subtitle">《北京的春節》</p>
+        </div>
+
+        <div id="gameSection">
+            <div class="vocabulary-card">
+                <div class="chinese-word" id="chineseWord">蒜瓣</div>
+                <div class="pinyin" id="pinyin">suàn bàn</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn listen-btn" id="listenBtn" title="聆聽示範">
+                    🔊
+                </button>
+                <button class="btn record-btn" id="recordBtn" title="開始錄音">
+                    🎤
+                </button>
+            </div>
+
+            <div class="status-message" id="statusMessage"></div>
+
+            <div class="progress-section">
+                <div class="progress-label">進度：<span id="progressCount">1</span>/10</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 10%;"></div>
+                </div>
+            </div>
+
+            <div class="navigation-btns">
+                <button class="nav-btn prev-btn" id="prevBtn" disabled>← 上一個</button>
+                <button class="nav-btn next-btn" id="nextBtn">下一個 →</button>
+            </div>
+        </div>
+
+        <div class="complete-section" id="completeSection">
+            <div class="complete-icon">✨</div>
+            <div class="complete-text">完成！</div>
+            <p style="font-size: 18px; color: #666; margin: 20px 0;">
+                恭喜你完成了全部10個詞語的朗讀練習！
+            </p>
+            <button class="reset-btn" id="resetBtn">重新開始</button>
+        </div>
+    </div>
+
+    <script>
+        // 詞語數據
+        const vocabularyData = [
+            { chinese: '蒜瓣', pinyin: 'suàn bàn' },
+            { chinese: '翡翠', pinyin: 'fěi cuì' },
+            { chinese: '農業', pinyin: 'nóng yè' },
+            { chinese: '榛子', pinyin: 'zhēn zǐ' },
+            { chinese: '栗子', pinyin: 'lì zǐ' },
+            { chinese: '膠棗', pinyin: 'jiāo zǎo' },
+            { chinese: '麥芽糖', pinyin: 'mài yá táng' },
+            { chinese: '江米糖', pinyin: 'jiāng mǐ táng' },
+            { chinese: '雜拌兒', pinyin: 'zá bàn ér' },
+            { chinese: '擦黑兒', pinyin: 'cā hēi ér' }
+        ];
+
+        let currentIndex = 0;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let isRecording = false;
+
+        // DOM元素
+        const chineseWordEl = document.getElementById('chineseWord');
+        const pinyinEl = document.getElementById('pinyin');
+        const listenBtn = document.getElementById('listenBtn');
+        const recordBtn = document.getElementById('recordBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const progressCount = document.getElementById('progressCount');
+        const progressBar = document.getElementById('progressBar');
+        const gameSection = document.getElementById('gameSection');
+        const completeSection = document.getElementById('completeSection');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // 初始化
+        function init() {
+            updateDisplay();
+            setupAudioRecording();
+            addEventListeners();
+        }
+
+        // 更新顯示
+        function updateDisplay() {
+            const vocab = vocabularyData[currentIndex];
+            chineseWordEl.textContent = vocab.chinese;
+            pinyinEl.textContent = vocab.pinyin;
+            progressCount.textContent = currentIndex + 1;
+            progressBar.style.width = ((currentIndex + 1) / 10 * 100) + '%';
+            
+            // 更新按鍵狀態
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === vocabularyData.length - 1;
+            
+            // 清除狀態信息
+            statusMessage.textContent = '';
+            statusMessage.className = 'status-message';
+            recordBtn.classList.remove('recording');
+        }
+
+        // 設置音頻錄製
+        function setupAudioRecording() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.ondataavailable = (event) => {
+                            recordedChunks.push(event.data);
+                        };
+                        mediaRecorder.onstop = () => {
+                            isRecording = false;
+                            recordBtn.classList.remove('recording');
+                            statusMessage.textContent = '✓ 錄音已保存';
+                            statusMessage.className = 'status-message status-success';
+                        };
+                    })
+                    .catch(err => {
+                        console.error('無法訪問麥克風:', err);
+                        statusMessage.textContent = '⚠️ 無法訪問麥克風，請檢查權限';
+                        statusMessage.className = 'status-message';
+                    });
+            }
+        }
+
+        // 播放示範錄音
+        function playExample() {
+            const vocab = vocabularyData[currentIndex];
+            const text = vocab.chinese;
+            
+            // 使用Web Speech API的TTS功能
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // 停止之前的語音
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN'; // 普通話
+                utterance.rate = 0.8; // 減慢速度便於學習
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                
+                listenBtn.disabled = true;
+                statusMessage.textContent = '▶️ 正在播放示範...';
+                statusMessage.className = 'status-message';
+                
+                utterance.onend = () => {
+                    listenBtn.disabled = false;
+                    statusMessage.textContent = '✓ 示範播放完畢';
+                    statusMessage.className = 'status-message status-success';
+                };
+                
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // 開始/停止錄音
+        function toggleRecording() {
+            if (!mediaRecorder) {
+                statusMessage.textContent = '⚠️ 麥克風未就緒，請刷新頁面';
+                return;
+            }
+
+            if (!isRecording) {
+                recordedChunks = [];
+                mediaRecorder.start();
+                isRecording = true;
+                recordBtn.classList.add('recording');
+                statusMessage.textContent = '● 錄音中...';
+                statusMessage.className = 'status-message status-recording';
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+            }
+        }
+
+        // 事件監聽器
+        function addEventListeners() {
+            listenBtn.addEventListener('click', playExample);
+            recordBtn.addEventListener('click', toggleRecording);
+            
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateDisplay();
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < vocabularyData.length - 1) {
+                    currentIndex++;
+                    updateDisplay();
+                } else {
+                    // 顯示完成屏幕
+                    gameSection.style.display = 'none';
+                    completeSection.classList.add('show');
+                }
+            });
+            
+            resetBtn.addEventListener('click', () => {
+                currentIndex = 0;
+                gameSection.style.display = 'block';
+                completeSection.classList.remove('show');
+                updateDisplay();
+            });
+        }
+
+        // 頁面加載時初始化
+        window.addEventListener('load', init);
+
+        // 清理資源
+        window.addEventListener('beforeunload', () => {
+            if (mediaRecorder) {
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+            speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
